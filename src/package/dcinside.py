@@ -15,11 +15,10 @@ def getUrl(url):
         return None
 
 def searchByName(keyword, gallId, search_pos=0, page=1):
-    soup = BeautifulSoup(
-        getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}"), 'html.parser')
-    if soup.prettify().startswith("<script"):
-        soup = BeautifulSoup(
-        getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}"), 'html.parser')
+    html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
+    if html.startswith("<script"):
+        htmp = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
+    soup = BeautifulSoup(html, 'html.parser')
     return soup
 
 def searchGallId(keyword):
