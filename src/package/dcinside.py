@@ -49,7 +49,7 @@ def searchParse(author):
         page = 1
         for i in range(5):
             soup = searchByName(author, gallId, search_pos, page)
-            trPosts = filter(None, soup.find_all("tr", class_="ub-content us-post"))
+            trPosts = list(filter(None, soup.find_all("tr", class_="ub-content us-post")))
             if len(trPosts) == 0:
                 break
             temp = [
