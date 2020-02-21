@@ -18,7 +18,7 @@ async def updateNameList(nameList, channel):
         for gall in res:
             await channel.send(f'{name}: {gall}')
             for post in res[gall]:
-                embed = discord.Embed(title=post["name"], url=post["link"], description="{0} 작성\n{1}".format(name, post["date"]))
+                embed = discord.Embed(title=post["name"], url=post["link"], description="{0}\n{1} 작성\n{2}".format(gall, name, post["date"]))
                 await channel.send(embed=embed)
                 db.appendPost(name, gall, int(post["number"]))
 
@@ -32,10 +32,12 @@ async def on_message(message):
                 gallName = message.content.replace("{0}{1}".format(settings.prefix, "갤러리추가"), "").strip()
                 id = dcinside.appendGallIdByName(gallName)
                 await message.channel.send('{0} 등록 완료.'.format(id))
-            if message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
+            elif message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
                 nameList = message.content.replace("{0}{1}".format(settings.prefix, "파싱"), "").strip().split(" ")
                 await updateNameList(nameList, message.channel)
                 await message.channel.send('파싱 끝났습니다.')
+            else:
+                await message.channel.send('잘못된 명령어입니다.')
         else:
             await message.channel.send('허가받은 사용자만 사용 가능합니다.')
             return
