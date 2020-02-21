@@ -30,8 +30,8 @@ async def on_message(message):
     if message.author.id in settings.USERID:
         if message.content.startswith("{0}{1}".format(settings.prefix, "갤러리추가")):
             gallName = message.content.replace("{0}{1}".format(settings.prefix, "갤러리추가"), "").strip()
-            dcinside.appendGallIdByName(gallName)
-            await message.channel.send('등록 완료.')
+            id = dcinside.appendGallIdByName(gallName)
+            await message.channel.send('{0} 등록 완료.'.format(id))
         if message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
             nameList = message.content.replace("{0}{1}".format(settings.prefix, "파싱"), "").strip().split(" ")
             await updateNameList(nameList, message.channel)

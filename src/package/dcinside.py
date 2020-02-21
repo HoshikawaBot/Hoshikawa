@@ -8,15 +8,19 @@ user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 headers = {'User-Agent': user_agent}
 
 def getUrl(url):
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=headers, allow_redirects=True)
     if res.status_code == 200:
         return res.text
     else:
         return None
 
-def searchByName(keyword, gallId, page=1):
-    return BeautifulSoup(
-        getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&s_type=search_name&s_keyword={keyword}"), 'html.parser')
+def searchByName(keyword, gallId, search_pos=0, page=1):
+    soup = BeautifulSoup(
+        getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}"), 'html.parser')
+    if soup.prettify().startswith("<script"):
+        soup = BeautifulSoup(
+        getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}"), 'html.parser')
+    return soup
 
 def searchGallId(keyword):
     return BeautifulSoup(
@@ -27,6 +31,13 @@ def appendGallIdByName(keyword):
     gallUrl = soup.find("ul", class_="integrate_cont_list").find("li").find("a")["href"]
     id = re.compile(r"(?:\?id=)(.*)").search(gallUrl).group(1)
     db.appendGallIdList(id)
+    return id
+
+def safe_int(value, default=0):
+    try:
+        return int(value)
+    except:
+        return default
 
 def searchParse(author):
     gallIdList = db.getGallIdList()
@@ -34,8 +45,10 @@ def searchParse(author):
     for gallId in gallIdList:
         oldPosts = db.getPostByAuthorAndGallId(author, gallId)
         newPosts = []
-        for page in range(1, 6):
-            soup = searchByName(author, gallId, page)
+        search_pos = 0
+        page = 1
+        for i in range(5):
+            soup = searchByName(author, gallId, search_pos, page)
             trPosts = soup.find_all("tr", class_="ub-content us-post")
             temp = [
                 {
@@ -54,6 +67,29 @@ def searchParse(author):
                 break
             else:
                 newPosts += temp
+                try:
+                    botpagebox = soup.find("div", class_="bottom_paging_box")
+                    pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
+                    maxPage = max(pages)
+                    if maxPage > page:
+                        page += 1
+                        continue
+
+                    if search_pos == 0:
+                        href = soup.find("a", class_="search_next")["href"]
+                        search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
+                        page = 1
+                    else:
+                        search_pos += 10000
+                        page = 1
+                except:
+                    if search_pos == 0:
+                        href = soup.find("a", class_="search_next")["href"]
+                        search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
+                        page = 1
+                    else:
+                        search_pos += 10000
+                        page = 1
         if newPosts:
             result.update({gallId: newPosts})
     return result
