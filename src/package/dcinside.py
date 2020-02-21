@@ -17,7 +17,7 @@ def getUrl(url):
 def searchByName(keyword, gallId, search_pos=0, page=1):
     html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
     if html.startswith("<script"):
-        htmp = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
+        html = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
     soup = BeautifulSoup(html, 'html.parser')
     return soup
 
