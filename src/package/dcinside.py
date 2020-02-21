@@ -32,23 +32,28 @@ def searchParse(author):
     gallIdList = db.getGallIdList()
     result = {}
     for gallId in gallIdList:
-        gallId = gallId[0]
-        oldPosts = [e[0] for e in db.getPostByAuthorAndGallId(author, gallId)]
+        oldPosts = db.getPostByAuthorAndGallId(author, gallId)
         newPosts = []
         for page in range(1, 6):
             soup = searchByName(author, gallId, page)
             trPosts = soup.find_all("tr", class_="ub-content us-post")
-            newPosts += [
+            temp = [
                 {
-                    "number": e["data-no"],
+                    "number": int(e["data-no"]),
                     "link": "https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"]),
-                    "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else "",
+                    "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
                     "date": e.find("td", class_="gall_date")["title"]
                 }
                 for e in trPosts
                 if e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
-                and int(e["data-no"]) not in oldPosts
             ]
+            dup = [e["number"] for e in temp if e["number"] in oldPosts]
+            if dup:
+                temp = [e for e in temp if e["number"] not in dup]
+                newPosts += temp
+                break
+            else:
+                newPosts += temp
         if newPosts:
             result.update({gallId: newPosts})
     return result
