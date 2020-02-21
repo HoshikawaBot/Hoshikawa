@@ -60,7 +60,8 @@ def searchParse(author):
                     "date": e.find("td", class_="gall_date")["title"]
                 }
                 for e in trPosts
-                if e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
+                if e is not None
+                and e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
             ]
             dup = [e["number"] for e in temp if e["number"] in oldPosts]
             if dup:
