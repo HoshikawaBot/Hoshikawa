@@ -49,7 +49,7 @@ def searchParse(author):
         page = 1
         for i in range(5):
             soup = searchByName(author, gallId, search_pos, page)
-            trPosts = list(filter(None, soup.find_all("tr", class_="ub-content us-post")))
+            trPosts = soup.find_all("tr", class_="ub-content us-post")
             if len(trPosts) == 0:
                 break
             temp = [
@@ -59,9 +59,7 @@ def searchParse(author):
                     "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
                     "date": e.find("td", class_="gall_date")["title"]
                 }
-                for e in trPosts
-                if e is not None
-                and e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
+                for e in trPosts if e is not None and e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
             ]
             dup = [e["number"] for e in temp if e["number"] in oldPosts]
             if dup:
