@@ -51,7 +51,7 @@ def searchParse(author):
             soup = searchByName(author, gallId, search_pos, page)
             trPosts = soup.find_all("tr", class_="ub-content us-post")
             if not trPosts:
-                continue
+                break
             temp = [
                 {
                     "number": int(e["data-no"]),

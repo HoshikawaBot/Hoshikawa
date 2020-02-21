@@ -54,7 +54,7 @@ async def updateAllAuthors():
             continue
         names = db.getNames()
         await updateNameList(names, channel)
-        await asyncio.sleep(15)
+        await asyncio.sleep(60)
 
 if __name__ == "__main__":
     run()
