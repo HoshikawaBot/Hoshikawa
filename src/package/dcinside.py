@@ -68,29 +68,20 @@ def searchParse(author):
                     break
                 else:
                     newPosts += temp
-                    try:
-                        botpagebox = soup.find("div", class_="bottom_paging_box")
-                        pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
-                        maxPage = max(pages)
-                        if maxPage > page:
-                            page += 1
-                            continue
+                    botpagebox = soup.find("div", class_="bottom_paging_box")
+                    pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
+                    maxPage = max(pages)
+                    if maxPage > page:
+                        page += 1
+                        continue
 
-                        if search_pos == 0:
-                            href = soup.find("a", class_="search_next")["href"]
-                            search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
-                            page = 1
-                        else:
-                            search_pos += 10000
-                            page = 1
-                    except:
-                        if search_pos == 0:
-                            href = soup.find("a", class_="search_next")["href"]
-                            search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
-                            page = 1
-                        else:
-                            search_pos += 10000
-                            page = 1
+                    if search_pos == 0:
+                        href = soup.find("a", class_="search_next")["href"]
+                        search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
+                        page = 1
+                    else:
+                        search_pos += 10000
+                        page = 1
         if newPosts:
             result.update({gallId: newPosts[::-1]})
     return result
