@@ -26,19 +26,19 @@ async def updateNameList(nameList, channel):
 async def on_message(message):
     if message.author == client.user:
         return
-    
-    if message.author.id in settings.USERID:
-        if message.content.startswith("{0}{1}".format(settings.prefix, "갤러리추가")):
-            gallName = message.content.replace("{0}{1}".format(settings.prefix, "갤러리추가"), "").strip()
-            id = dcinside.appendGallIdByName(gallName)
-            await message.channel.send('{0} 등록 완료.'.format(id))
-        if message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
-            nameList = message.content.replace("{0}{1}".format(settings.prefix, "파싱"), "").strip().split(" ")
-            await updateNameList(nameList, message.channel)
-            await message.channel.send('파싱 끝났습니다.')
-    else:
-        await message.channel.send('허가받은 사용자만 사용 가능합니다.')
-        return
+    if message.content.startswith(settings.prefix):
+        if message.author.id in settings.USERID:
+            if message.content.startswith("{0}{1}".format(settings.prefix, "갤러리추가")):
+                gallName = message.content.replace("{0}{1}".format(settings.prefix, "갤러리추가"), "").strip()
+                id = dcinside.appendGallIdByName(gallName)
+                await message.channel.send('{0} 등록 완료.'.format(id))
+            if message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
+                nameList = message.content.replace("{0}{1}".format(settings.prefix, "파싱"), "").strip().split(" ")
+                await updateNameList(nameList, message.channel)
+                await message.channel.send('파싱 끝났습니다.')
+        else:
+            await message.channel.send('허가받은 사용자만 사용 가능합니다.')
+            return
 
 def run():
     client.loop.create_task(updateAllAuthors())

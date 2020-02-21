@@ -50,46 +50,47 @@ def searchParse(author):
         for i in range(5):
             soup = searchByName(author, gallId, search_pos, page)
             trPosts = soup.find_all("tr", class_="ub-content us-post")
-            temp = [
-                {
-                    "number": int(e["data-no"]),
-                    "link": "https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"]),
-                    "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
-                    "date": e.find("td", class_="gall_date")["title"]
-                }
-                for e in trPosts
-                if e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
-            ]
-            dup = [e["number"] for e in temp if e["number"] in oldPosts]
-            if dup:
-                temp = [e for e in temp if e["number"] not in dup]
-                newPosts += temp
-                break
-            else:
-                newPosts += temp
-                try:
-                    botpagebox = soup.find("div", class_="bottom_paging_box")
-                    pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
-                    maxPage = max(pages)
-                    if maxPage > page:
-                        page += 1
-                        continue
+            if trPosts:
+                temp = [
+                    {
+                        "number": int(e["data-no"]),
+                        "link": "https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"]),
+                        "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
+                        "date": e.find("td", class_="gall_date")["title"]
+                    }
+                    for e in trPosts
+                    if e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
+                ]
+                dup = [e["number"] for e in temp if e["number"] in oldPosts]
+                if dup:
+                    temp = [e for e in temp if e["number"] not in dup]
+                    newPosts += temp
+                    break
+                else:
+                    newPosts += temp
+                    try:
+                        botpagebox = soup.find("div", class_="bottom_paging_box")
+                        pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
+                        maxPage = max(pages)
+                        if maxPage > page:
+                            page += 1
+                            continue
 
-                    if search_pos == 0:
-                        href = soup.find("a", class_="search_next")["href"]
-                        search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
-                        page = 1
-                    else:
-                        search_pos += 10000
-                        page = 1
-                except:
-                    if search_pos == 0:
-                        href = soup.find("a", class_="search_next")["href"]
-                        search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
-                        page = 1
-                    else:
-                        search_pos += 10000
-                        page = 1
+                        if search_pos == 0:
+                            href = soup.find("a", class_="search_next")["href"]
+                            search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
+                            page = 1
+                        else:
+                            search_pos += 10000
+                            page = 1
+                    except:
+                        if search_pos == 0:
+                            href = soup.find("a", class_="search_next")["href"]
+                            search_pos = int(re.compile(r"search_pos=(-\d*)").search(href).group(1))
+                            page = 1
+                        else:
+                            search_pos += 10000
+                            page = 1
         if newPosts:
-            result.update({gallId: newPosts})
+            result.update({gallId: newPosts[::-1]})
     return result
