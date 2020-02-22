@@ -16,16 +16,11 @@ def getUrl(url):
         return None
 
 def searchByName(keyword, gallId, search_pos=0, page=1):
-    try:
-        html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
-        if html.startswith("<script"):
-            html = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
-        soup = BeautifulSoup(html, 'html.parser')
-        return soup
-    except:
+    html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
+    if html.startswith("<script"):
         html = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
-        soup = BeautifulSoup(html, 'html.parser')
-        return soup
+    soup = BeautifulSoup(html, 'html.parser')
+    return soup
 def searchGallId(keyword):
     return BeautifulSoup(
         getUrl(f"https://search.dcinside.com/combine/q/{keyword}"), 'html.parser')
