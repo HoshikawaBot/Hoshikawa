@@ -20,7 +20,7 @@ async def updateNameList(nameList, channel):
             for post in res[gall]:
                 embed = discord.Embed(title=post["name"], url=post["link"], description="{0}\n{1} 작성\n{2}".format(gall, name, post["date"]))
                 await channel.send(embed=embed)
-                await channel.send(file=discord.File(post["file"]), filename=post["name"])
+                await channel.send(file=discord.File(post["file"], filename="{0}.html".format(post["number"])))
                 db.appendPost(name, gall, int(post["number"]))
 
 @client.event
@@ -32,6 +32,9 @@ async def on_message(message):
             if message.content.startswith("{0}{1}".format(settings.prefix, "갤러리추가")):
                 gallName = message.content.replace("{0}{1}".format(settings.prefix, "갤러리추가"), "").strip()
                 id = dcinside.appendGallIdByName(gallName)
+                if id is None:
+                    await message.channel.send('등록 실패.')
+                    return
                 await message.channel.send('{0} 등록 완료.'.format(id))
             elif message.content.startswith("{0}{1}".format(settings.prefix, "파싱")):
                 nameList = message.content.replace("{0}{1}".format(settings.prefix, "파싱"), "").strip().split(" ")

@@ -1,29 +1,36 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlencode
 import package.db as db
 import re
-from array import array
+import io
 
-user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36'
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
 headers = {'User-Agent': user_agent}
 
 def getUrl(url):
-    res = requests.get(url, headers=headers, allow_redirects=True)
-    if res.status_code == 200:
-        return res.text
-    else:
+    try:
+        res = requests.get(url, headers=headers, allow_redirects=True)
+        if res.status_code == 200:
+            return res.text
+        else:
+            return None
+    except:
         return None
 
 def searchByName(keyword, gallId, search_pos=0, page=1):
     html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
     if html.startswith("<script"):
         html = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
+    if html is None:
+        return None
     soup = BeautifulSoup(html, 'html.parser')
     return soup
 def searchGallId(keyword):
+    html = getUrl(f"https://search.dcinside.com/combine/q/{keyword}")
+    if html is None:
+        return None
     return BeautifulSoup(
-        getUrl(f"https://search.dcinside.com/combine/q/{keyword}"), 'html.parser')
+        html, 'html.parser')
 
 def appendGallIdByName(keyword):
     soup = searchGallId(keyword)
@@ -48,6 +55,8 @@ def searchParse(author):
         page = 1
         for i in range(5):
             soup = searchByName(author, gallId, search_pos, page)
+            if soup is None:
+                continue
             trPosts = soup.find_all("tr", class_="ub-content us-post")
             if len(trPosts) == 0:
                 break
@@ -57,8 +66,8 @@ def searchParse(author):
                         "number": int(e["data-no"]),
                         "link": "https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"]),
                         "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
-                        "date": e.find("td", class_="gall_date")["title"],
-                        "file": array("B", getUrl("https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"])))
+                        "date": e.find("td", class_="gall_date")["title"],     
+                        "file": io.BytesIO(getUrl("https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"])).encode('utf-8'))
                     }
                     for e in trPosts if e is not None and e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
                 ]
@@ -83,7 +92,7 @@ def searchParse(author):
                     else:
                         search_pos += 10000
                         page = 1
-            except:
+            except Exception as e:
                 try:
                     botpagebox = soup.find("div", class_="bottom_paging_box")
                     pages = [safe_int(a.text) for a in botpagebox.find_all("a")]
