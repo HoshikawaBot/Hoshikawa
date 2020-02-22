@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlencode
 import package.db as db
 import re
+from array import array
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1985.143 Safari/537.36'
 headers = {'User-Agent': user_agent}
@@ -61,7 +62,8 @@ def searchParse(author):
                         "number": int(e["data-no"]),
                         "link": "https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"]),
                         "name": "{0} {1}".format(e.find("td", class_="gall_tit ub-word").find("a").text, e.find("span").text) if "[" in e.find("span").text else e.find("td", class_="gall_tit ub-word").find("a").text,
-                        "date": e.find("td", class_="gall_date")["title"]
+                        "date": e.find("td", class_="gall_date")["title"],
+                        "file": array("B", getUrl("https://gall.dcinside.com{0}".format(e.find("td", class_="gall_tit ub-word").find("a")["href"])))
                     }
                     for e in trPosts if e is not None and e.find("td", class_="gall_writer ub-writer")["data-nick"] == author
                 ]
