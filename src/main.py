@@ -20,7 +20,7 @@ async def updateNameList(nameList, channel):
             for post in res[gall]:
                 embed = discord.Embed(title=post["name"], url=post["link"], description="{0}\n{1} 작성\n{2}".format(gall, name, post["date"]))
                 await channel.send(embed=embed)
-                await channel.send(file=discord.file(post["file"]), filename=post["name"])
+                await channel.send(file=discord.File(post["file"]), filename=post["name"])
                 db.appendPost(name, gall, int(post["number"]))
 
 @client.event
