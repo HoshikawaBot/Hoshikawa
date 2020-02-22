@@ -19,9 +19,7 @@ def getUrl(url):
 
 def searchByName(keyword, gallId, search_pos=0, page=1):
     html = getUrl(f"https://gall.dcinside.com/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
-    if html is None:
-        return None
-    if html.startswith("<script"):
+    if html is None or html.startswith("<script"):
         html = getUrl(f"https://gall.dcinside.com/mgallery/board/lists/?id={gallId}&page={page}&search_pos={search_pos}&s_type=search_name&s_keyword={keyword}")
     if html is None:
         return None
