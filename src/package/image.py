@@ -1,3 +1,5 @@
+'''
+
 import requests
 
 
@@ -58,3 +60,5 @@ print(res.status_code)
 if res.status_code == 200:
     with open("image.png", "wb+") as w:
         w.write(res.content)
+
+'''
