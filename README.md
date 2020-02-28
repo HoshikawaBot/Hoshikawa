@@ -2,7 +2,7 @@
 
 ## Installation
 
-set up pip dependencies:
+Set up pip dependencies:
 
 ```
 pip install -r requirements.txt
