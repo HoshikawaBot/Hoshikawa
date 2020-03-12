@@ -14,13 +14,13 @@ Set Environment Variable.
 Windows:
 
 ```cmd
-set DISCORD_TOKEN=YOUR_TOKEN
+set HOSHIKAWA_TOKEN=YOUR_TOKEN
 ```
 
 Linux:
 
 ```bash
-export DISCORD_TOKEN=YOUR_TOKEN
+export HOSHIKAWA_TOKEN=YOUR_TOKEN
 ```
 
 then edit src/setting.py to your config.

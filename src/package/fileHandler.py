@@ -15,4 +15,3 @@ def dir(path, count=1):
             return dir_iter(os.path.dirname(__path__), __count__ - 1)
     
     return dir_iter(os.path.abspath(path), count)
-
