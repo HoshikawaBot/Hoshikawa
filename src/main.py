@@ -6,8 +6,6 @@ import argparse
 import sys
 from discord.ext import commands
 
-args = {}
-
 bot = commands.Bot(command_prefix=settings.prefix)
 
 @bot.event
@@ -30,7 +28,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-test', help='exit after ready', action='store_true')
     parser.set_defaults(test=False)
-    global args
     args = parser.parse_args()
     # Test Execution Handling End
     run()
