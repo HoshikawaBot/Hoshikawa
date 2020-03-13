@@ -4,25 +4,17 @@ import asyncio
 import package.db as db
 import argparse
 import sys
+from discord.ext import commands
 
-client = discord.Client(command_prefix=settings.prefix)
+bot = commands.Bot(command_prefix=settings.prefix)
 
-@client.event
+@bot.event
 async def on_ready():
-    print('logged in as {0.user}!'.format(client))
-
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        # Self Executing
-        # Must be Guarded
-        return
-    if message.content.startswith(settings.prefix):
-        # TODO
-        return
+    bot.load_extension("cogs.say")
+    print('logged in as {0.user}!'.format(bot))
 
 def run():
-    client.run(settings.DISCORD_TOKEN)
+    bot.run(settings.DISCORD_TOKEN)
 
 if __name__ == "__main__":
     # Test Execution Handling Start
