@@ -6,6 +6,8 @@ import argparse
 import sys
 from discord.ext import commands
 
+args = {}
+
 bot = commands.Bot(command_prefix=settings.prefix)
 
 @bot.event
@@ -18,14 +20,17 @@ def run():
         return
     bot.load_extension("cogs.say")
     bot.run(settings.DISCORD_TOKEN)
+    # if Test Mode
+    if args.test == True:
+        # Exit
+        sys.exit()
 
 if __name__ == "__main__":
     # Test Execution Handling Start
     parser = argparse.ArgumentParser()
     parser.add_argument('-test', help='exit after ready', action='store_true')
     parser.set_defaults(test=False)
+    global args
     args = parser.parse_args()
-    if args.test == True:
-        sys.exit()
     # Test Execution Handling End
     run()
