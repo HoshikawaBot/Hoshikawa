@@ -11,6 +11,10 @@ bot = commands.Bot(command_prefix=settings.prefix)
 @bot.event
 async def on_ready():
     print('logged in as {0.user}!'.format(bot))
+    # if Test Mode
+    if args.test == True:
+        # Exit
+        sys.exit()
 
 def run():
     if not settings.DISCORD_TOKEN:
@@ -18,10 +22,7 @@ def run():
         return
     bot.load_extension("cogs.say")
     bot.run(settings.DISCORD_TOKEN)
-    # if Test Mode
-    if args.test == True:
-        # Exit
-        sys.exit()
+
 
 if __name__ == "__main__":
     # Test Execution Handling Start
