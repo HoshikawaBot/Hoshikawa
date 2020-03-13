@@ -24,10 +24,12 @@ def run():
     client.run(settings.DISCORD_TOKEN)
 
 if __name__ == "__main__":
+    # Test Execution Handling Start
     parser = argparse.ArgumentParser()
     parser.add_argument('-test', help='exit after ready', action='store_true')
     parser.set_defaults(test=False)
     args = parser.parse_args()
     if args.test == True:
         sys.exit()
+    # Test Execution Handling End
     run()
