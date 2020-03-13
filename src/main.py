@@ -15,6 +15,7 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
         # Self Executing
+        # Must be Guarded
         return
     if message.content.startswith(settings.prefix):
         # TODO
