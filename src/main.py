@@ -10,10 +10,13 @@ bot = commands.Bot(command_prefix=settings.prefix)
 
 @bot.event
 async def on_ready():
-    bot.load_extension("cogs.say")
     print('logged in as {0.user}!'.format(bot))
 
 def run():
+    if not settings.DISCORD_TOKEN:
+        print('no token!')
+        return
+    bot.load_extension("cogs.say")
     bot.run(settings.DISCORD_TOKEN)
 
 if __name__ == "__main__":
