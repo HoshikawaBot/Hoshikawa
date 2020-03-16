@@ -1,5 +1,6 @@
 from discord.ext import commands
 from package.settings import prefix
+from package.commandHandler import cutHead
 
 class Say(commands.Cog):
     def __init__(self, bot):
@@ -8,13 +9,13 @@ class Say(commands.Cog):
     @commands.command()
     async def say(self, ctx):
         """say something to bot."""
-        await ctx.send(ctx.message.content[len(prefix)+3+1:])
+        await ctx.send(cutHead(ctx.message.content, "say"))
         return
     
     @commands.command()
     async def sayd(self, ctx):
         """say something to bot and remove message."""
-        await ctx.send(ctx.message.content[len(prefix)+4+1:])
+        await ctx.send(cutHead(ctx.message.content, "sayd"))
         await ctx.message.delete()
         return
 
