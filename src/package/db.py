@@ -17,6 +17,9 @@ def setup(dir="db", filename="db"):
 
     connect(dbPath)
 
+    createPostTable()
+
+def createPostTable():
     sql = 'create table if not exists post (name varchar(255) primary key, context text)'
     c.execute(sql)
     conn.commit()
