@@ -19,7 +19,6 @@ def setup(dir="db", filename="db"):
 
     connect(dbPath)
     
-    dropPostTable()
     createPostTable()
 
 def dropPostTable():
@@ -64,11 +63,6 @@ def appendPost(name, writer_id, text):
     return True
 
 def updatePost(name, text):
-    finder = 'select EXISTS (select * from post where name=(?)) as success'
-    c.execute(finder, [name])
-    exists = c.fetchone()
-    if exists == 0:
-        return False
     sql = 'update post set context=(?) where name=(?)'
     c.execute(sql, [text, name])
     conn.commit()

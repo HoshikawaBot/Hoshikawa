@@ -32,4 +32,5 @@ if __name__ == "__main__":
     parser.set_defaults(test=False)
     args = parser.parse_args()
     # Test Execution Handling End
+    db.setup()
     run()
