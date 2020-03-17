@@ -16,7 +16,10 @@ class Post(commands.Cog):
     @commands.group()
     async def post(self, ctx):
         if ctx.invoked_subcommand is None:
-            await ctx.send('post create|update|delete|read')
+            if cutHead(ctx.message.content, "post") != "":
+                await self.read_core(ctx, arg="post")
+            else:
+                await ctx.send("post create|update|delete|read")
 
     async def waitForMessage(self, ctx, timeout=1000.0):
         await ctx.send(f"<@{ctx.message.author.id}> message listening...")
@@ -50,7 +53,7 @@ class Post(commands.Cog):
         await ctx.send(name)
         msg = await self.waitForMessage(ctx)
         db.appendPost(name, str(ctx.author.id), msg.content)
-        await self.read_core(ctx, arg="create")
+        await self.read_core(ctx, arg="post create")
         return
     
     @post.command()
@@ -67,11 +70,11 @@ class Post(commands.Cog):
             await ctx.send("message writer and post writer is not same")
             return
         
-        await self.read_core(ctx, arg="update")
+        await self.read_core(ctx, arg="post update")
 
         msg = await self.waitForMessage(ctx)
         db.updatePost(name, msg.content)
-        await self.read_core(ctx, arg="update")
+        await self.read_core(ctx, arg="post update")
         return
     
     @post.command()
@@ -87,9 +90,9 @@ class Post(commands.Cog):
         await ctx.send("message deleted!")
         return
     
-    async def read_core(self, ctx, arg="read"):
+    async def read_core(self, ctx, arg="post read"):
         name = ""
-        name = cutHead(ctx.message.content, f"post {arg}")
+        name = cutHead(ctx.message.content, arg)
         res = db.getPostByName(name)
         if not res:
             await ctx.send("post does not exists")
