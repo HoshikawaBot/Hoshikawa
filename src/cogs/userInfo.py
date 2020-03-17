@@ -11,7 +11,7 @@ class UserInfo(commands.Cog):
     @commands.command()
     async def userinfo(self, ctx):
         person = ctx.message.mentions[0].id
-        person = await self.bot.get_user(person)
+        person = self.bot.get_user(person)
         name = person.name
         discriminator = person.discriminator
         avatar = person.avatar_url
@@ -20,7 +20,7 @@ class UserInfo(commands.Cog):
             description="id:%s" % (id),
             color=0xE0FFFF)
         embed.set_thumbnail(url=avatar)
-        await self.bot.send_message(ctx.message.channel, embed=embed)
+        await ctx.send("", embed=embed)
 
 def setup(bot):
     bot.add_cog(UserInfo(bot))
