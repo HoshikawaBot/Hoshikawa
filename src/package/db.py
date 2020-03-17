@@ -1,4 +1,5 @@
 import os
+import sys
 import sqlite3
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) # 상위 경로 import 가능
 import package.fileHandler as fileHandler
@@ -18,10 +19,17 @@ def setup(dir="db", filename="db"):
 
     connect(dbPath)
 
+    dropPostTable()
+    
     createPostTable()
 
+def dropPostTable():
+    sql = 'drop table post if exists'
+    c.execute(sql)
+    conn.commit()
+
 def createPostTable():
-    sql = 'create table if not exists post (name varchar(255) primary key, context text)'
+    sql = 'create table if not exists post (name varchar(255) primary key, writer_id int, context text)'
     c.execute(sql)
     conn.commit()
 
@@ -33,20 +41,26 @@ def connect(dbPath=dbPath):
 def disconnect():
     conn.close()
 
-def getPost(name):
-    sql = 'select context from post where name=(?)'
+def getPostByName(name):
+    sql = 'select * from post where name=(?)'
     c.execute(sql, [name])
     res = c.fetchone()
     return res
 
-def appendPost(name, text):
+def getPostById(writer_id):
+    sql = 'select * from post where writer_id=(?)'
+    c.execute(sql, [writer_id])
+    res = c.fetchall()
+    return res
+
+def appendPost(name, writer_id, text):
     finder = 'select EXISTS (select * from post where name=(?)) as success'
     c.execute(finder, [name])
     exists = c.fetchone()
     if exists == 1:
         return False
-    sql = 'insert into post values (?, ?)'
-    c.execute(sql, [name, text])
+    sql = 'insert into post values (?, ?, ?)'
+    c.execute(sql, [name, writer_id, text])
     conn.commit()
     return True
 

@@ -21,6 +21,7 @@ def run():
         print('no token!')
         return
     bot.load_extension("cogs.say")
+    bot.load_extension("cogs.post")
     bot.run(settings.DISCORD_TOKEN)
 
 
