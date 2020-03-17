@@ -19,11 +19,15 @@ class UserInfo(commands.Cog):
 
         currentyear = time.strftime("%Y")
 
-        embed = Embed(title="%s" % (name),
-            description="%s#%s님 유저 정보" % (name, discriminator),
+        ymd = str(person.created_at).split(" ")[0].split("-")
+        ymdString = f"{ymd[0]}년 {ymd[1]}월 {ymd[2]}일"
+
+        embed = Embed(title="%s님 유저 정보" % (name),
             color=0xE0FFFF)
-        embed.add_field(name="아이디", value=id)
-        embed.set_thumbnail(url=avatar)
+        embed.set_image(url=avatar)
+        embed.add_field(name="이름", value=f"{name}#{discriminator}")
+        embed.add_field(name="아이디:", value=id)
+        embed.add_field(name="계정 생성일:", value=ymdString)
         embed.set_footer(text=f"{currentyear} HoshikawaBot, MIT License")
         await ctx.send("", embed=embed)
 
