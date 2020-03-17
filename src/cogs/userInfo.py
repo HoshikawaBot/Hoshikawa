@@ -16,9 +16,10 @@ class UserInfo(commands.Cog):
         discriminator = person.discriminator
         avatar = person.avatar_url
         id = person.id
-        embed = Embed(title="%s#%s" % (name, discriminator),
-            description="id:%s" % (id),
+        embed = Embed(title="%s" % (name),
+            description="%s#%s님 유저 정보" % (name, discriminator),
             color=0xE0FFFF)
+        embed.add_field(name="아이디", value=id)
         embed.set_thumbnail(url=avatar)
         await ctx.send("", embed=embed)
 
