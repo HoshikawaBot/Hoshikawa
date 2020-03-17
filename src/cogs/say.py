@@ -1,4 +1,5 @@
 from discord.ext import commands
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) # 상위 경로 import 가능
 from package.settings import prefix
 from package.commandHandler import cutHead
 
