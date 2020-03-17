@@ -22,6 +22,7 @@ def run():
         return
     bot.load_extension("cogs.say")
     bot.load_extension("cogs.post")
+    bot.load_extension("cogs.userInfo")
     bot.run(settings.DISCORD_TOKEN)
 
 
