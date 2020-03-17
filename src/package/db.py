@@ -18,9 +18,8 @@ def setup(dir="db", filename="db"):
     dbPath = "{0}/{1}".format(dbDir, f"{filename}.db")
 
     connect(dbPath)
-
-    dropPostTable()
     
+    dropPostTable()
     createPostTable()
 
 def dropPostTable():
@@ -29,7 +28,7 @@ def dropPostTable():
     conn.commit()
 
 def createPostTable():
-    sql = 'create table if not exists post (name varchar(255) primary key, writer_id int, context text)'
+    sql = 'create table if not exists post (name varchar(255) primary key, writer_id varchar(255), context text)'
     c.execute(sql)
     conn.commit()
 
