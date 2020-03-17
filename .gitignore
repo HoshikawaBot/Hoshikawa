@@ -2,3 +2,4 @@ db/
 src/__pycache__
 src/package/__pycache__
 src/cogs/__pycache__
+src/test/__pycache__
