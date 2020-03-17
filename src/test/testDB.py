@@ -24,7 +24,7 @@ class DbTest(unittest.TestCase):
     def tearDown(self):
         try:
             db.disconnect()
-            os.remove(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))), "db\\dbtest.db"))
+            os.remove(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))), "db/dbtest.db"))
         except Exception:
             print("!!! teardown Method Exception !!!")
             traceback.print_exc(file=sys.stdout)
