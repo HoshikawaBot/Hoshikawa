@@ -52,6 +52,8 @@ def getPostById(writer_id):
     return res
 
 def appendPost(name, writer_id, text):
+    if not isinstance(writer_id, str):
+        raise TypeError("writer_id is not str but it must be.")
     finder = 'select EXISTS (select * from post where name=(?)) as success'
     c.execute(finder, [name])
     exists = c.fetchone()
