@@ -3,8 +3,7 @@ import sys
 from discord.ext import commands
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__)))) # 상위 경로 import 가능
 from discord import Embed
-import datetime
-
+import time
 class UserInfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -18,7 +17,7 @@ class UserInfo(commands.Cog):
         avatar = person.avatar_url
         id = person.id
 
-        currentyear = datetime.now().year
+        currentyear = time.strftime("%Y")
 
         embed = Embed(title="%s" % (name),
             description="%s#%s님 유저 정보" % (name, discriminator),
