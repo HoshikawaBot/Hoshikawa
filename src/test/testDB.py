@@ -30,7 +30,7 @@ class DbTest(unittest.TestCase):
             traceback.print_exc(file=sys.stdout)
             print("!!! teardown Method Exception !!!")
     
-    def testAppend(self):
+    def testPostAppend(self):
         print("@@ Append test... @@")
         print("post appending test...")
         db.appendPost(self.testRowName, str(557197552336896010), self.testRowText)
@@ -41,7 +41,7 @@ class DbTest(unittest.TestCase):
         print("post exists!")
         print("@@ Append test Success! @@", end="\n\n\n")
     
-    def testUpdate(self):
+    def testPostUpdate(self):
         print("@@ update test... @@")
         print("post appending test...")
         db.appendPost(self.testRowName, str(557197552336896010), self.testRowText)
@@ -55,16 +55,53 @@ class DbTest(unittest.TestCase):
         print("context equals!")
         print("@@ update test Success! @@", end="\n\n\n")
     
-    def testDelete(self):
+    def testPostDelete(self):
         print("@@ delete test... @@")
-        print("post appending test...")
+        print("tag appending test...")
         db.appendPost(self.testRowName, str(557197552336896010), self.testRowText)
-        print("post append success!\n")
-        print("post deleting...")
+        print("tag append success!\n")
+        print("tag deleting...")
         db.deletePost(self.testRowName)
         res = db.getPostByName(self.testRowName)
         self.assertIsNone(res)
-        print("post deleted!")
+        print("tag deleted!")
+        print("@@ delete test Success! @@", end="\n\n\n")
+
+    def testTagAppend(self):
+        print("@@ Append test... @@")
+        print("tag appending test...")
+        db.appendTag(self.testRowName, str(557197552336896010), self.testRowText)
+        print("tag append success!\n")
+        print("getting tag which appended...")
+        res = db.getTagByName(self.testRowName)
+        self.assertTrue(res, "after append tag, it should exists, but tag is not exists.")
+        print("tag exists!")
+        print("@@ Append test Success! @@", end="\n\n\n")
+    
+    def testTagUpdate(self):
+        print("@@ update test... @@")
+        print("tag appending test...")
+        db.appendTag(self.testRowName, str(557197552336896010), self.testRowText)
+        print("tag append success!\n")
+        print("tag updating...")
+        db.updateTag(self.testRowName, self.testRowTextUpdated)
+        print("tag updated!")
+        print("Getting updated Tag")
+        res = db.getTagByName(self.testRowName)
+        self.assertEqual(self.testRowTextUpdated, res[2])
+        print("context equals!")
+        print("@@ update test Success! @@", end="\n\n\n")
+    
+    def testTagDelete(self):
+        print("@@ delete test... @@")
+        print("tag appending test...")
+        db.appendTag(self.testRowName, str(557197552336896010), self.testRowText)
+        print("tag append success!\n")
+        print("tag deleting...")
+        db.deleteTag(self.testRowName)
+        res = db.getTagByName(self.testRowName)
+        self.assertIsNone(res)
+        print("tag deleted!")
         print("@@ delete test Success! @@", end="\n\n\n")
 
 
