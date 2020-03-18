@@ -37,7 +37,7 @@ class DbTest(unittest.TestCase):
         print("post append success!\n")
         print("getting post which appended...")
         res = db.getPostByName(self.testRowName)
-        self.assertTrue(res is not None, "after append post, it should exists, but post is not exists.")
+        self.assertTrue(res, "after append post, it should exists, but post is not exists.")
         print("post exists!")
         print("@@ Append test Success! @@", end="\n\n\n")
     
