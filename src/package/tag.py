@@ -18,7 +18,15 @@ class __Tag__:
         for e in tempFunctions:
             self.functions[e] = {
                 "function": eval(f"self.tagFunctions.{e}"),
-                "argscount": len(getfullargspec(eval(f"self.tagFunctions.{e}"))[0]) - 1 # because it's method,
+                # Question: wait, did he used eval()? eval() considered harmful!
+                # Answer: Not all.
+                # *only* in user input, eval() is harmful and generate potential exploits.
+                # but we're using eval() with method name list.
+                # In order to to call and store function object from method name.
+                # so eval() is easy and safe way to do this operation.
+                "argscount": len(getfullargspec(eval(f"self.tagFunctions.{e}"))[0]) - 1
+                # minus 1?
+                # because it's method,
                 # self exists
             }
         
