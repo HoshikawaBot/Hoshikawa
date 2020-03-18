@@ -22,7 +22,7 @@ class __Tag__:
                 # Answer: Not all.
                 # *only* in user input, eval() is harmful and generate potential exploits.
                 # but we're using eval() with method name list.
-                # In order to to call and store function object from method name.
+                # In order to call and store function object from method name.
                 # so eval() is easy and safe way to do this operation.
                 "argscount": len(getfullargspec(eval(f"self.tagFunctions.{e}"))[0]) - 1
                 # minus 1?
