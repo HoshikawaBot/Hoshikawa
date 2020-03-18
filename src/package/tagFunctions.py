@@ -6,5 +6,5 @@ class TagFunctions:
     def b(self):
         return "Hello B!"
     
-    def print_(self, arg):
+    def print(self, arg):
         return arg
