@@ -106,7 +106,7 @@ class WordCloud_(commands.Cog):
             mask = np.array(Image.open(imgPath))
             image_colors = ImageColorGenerator(mask)
         
-        fontPath = "C:/Windows/Fonts/malgun.ttf"
+        fontPath = "fonts/malgun.ttf"
         
         wordcloud = None
 
