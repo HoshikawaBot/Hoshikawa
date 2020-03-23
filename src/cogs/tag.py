@@ -19,7 +19,7 @@ class Tag(commands.Cog):
                 params=cutHead(ctx.message.content, "tag").split(" ")[1:],
                 content=cutHead(ctx.message.content, "tag").split(" ")[0])
             else:
-                await ctx.send("tag create|raw|update|delete|(tagname) for read")
+                await ctx.send(prefix+"tag create|raw|update|delete|(tagname) for read")
 
     async def waitForMessage(self, ctx, timeout=1000.0):
         await ctx.send(f"<@{ctx.message.author.id}> message listening...")

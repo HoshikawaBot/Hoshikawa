@@ -6,6 +6,7 @@ import argparse
 import sys
 from discord.ext import commands
 
+
 bot = commands.Bot(command_prefix=settings.prefix)
 
 @bot.event
@@ -24,6 +25,7 @@ def run():
     bot.load_extension("cogs.post")
     bot.load_extension("cogs.tag")
     bot.load_extension("cogs.userInfo")
+    bot.load_extension("cogs.wordCloud")
     bot.run(settings.DISCORD_TOKEN)
 
 

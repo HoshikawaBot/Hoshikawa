@@ -19,7 +19,7 @@ class Post(commands.Cog):
             if cutHead(ctx.message.content, "post") != "":
                 await self.read_core(ctx, arg="post")
             else:
-                await ctx.send("post create|update|delete|(postname) for read")
+                await ctx.send(prefix+"post create|update|delete|(postname) for read")
 
     async def waitForMessage(self, ctx, timeout=1000.0):
         await ctx.send(f"<@{ctx.message.author.id}> message listening...")
