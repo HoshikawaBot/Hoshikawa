@@ -2,7 +2,7 @@
 # https://github.com/damnever/pigar
 
 # src\cogs\wordCloud.py: 14
-Pillow == 6.2.1
+Pillow >= 6.2.2
 
 # src\cogs\post.py: 3,7
 # src\cogs\say.py: 3
